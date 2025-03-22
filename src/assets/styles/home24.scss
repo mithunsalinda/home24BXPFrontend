@@ -1,0 +1,30 @@
+.login-container-right {
+    height:'100vh';
+    background-color: $bg-color-dark;
+    height: 100vh;
+    display: flex;
+    padding: 30px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    .login-title {
+        color: $text-color-light;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        .login-title-span{
+   
+        }
+    }
+    .login-subtitle {
+        color: $text-color-light;
+        font-size: 16px;
+        font-weight: 400;
+        margin-bottom: 20px;
+    }
+}
+.imageBgColor{
+    background-color: $bg-color-light;
+    padding: 20px;
+}

@@ -1,0 +1,54 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@gmail.com",
+      "password": "123",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "email": "user@gmail.com",
+      "password": "123",
+      "role": "user"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Ultra Widget",
+      "category": "electronics",
+      "description": "A high-quality widget",
+      "price": 29.99,
+      "lastModified": "2024-01-01T10:00:00.000Z",
+      "picture": []
+    },
+    {
+      "id": "2",
+      "name": "Mega Gadget",
+      "category": "gadgets",
+      "description": "Cutting edge tech",
+      "price": 59.99,
+      "lastModified": "2024-01-02T10:00:00.000Z",
+      "picture": []
+    },
+    {
+      "id": "21f9",
+      "name": "Super Widget",
+      "category": "tools",
+      "description": "A new widget",
+      "price": 19.99,
+      "lastModified": "2025-03-22T12:00:00.000Z",
+      "picture": []
+    },
+    {
+      "id": "38a5",
+      "name": "Super Widget1",
+      "category": "tools",
+      "description": "A new widget",
+      "price": 19.99,
+      "lastModified": "2025-03-22T12:00:00.000Z",
+      "picture": []
+    }
+  ]
+}
