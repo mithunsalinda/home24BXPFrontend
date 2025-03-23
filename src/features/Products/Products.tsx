@@ -1,4 +1,18 @@
-import { Card, Table, Spin, Button, Modal, Form, Select, Input, message, Anchor } from 'antd';
+import {
+  Card,
+  Table,
+  Spin,
+  Button,
+  Modal,
+  Form,
+  Select,
+  Input,
+  message,
+  Anchor,
+  Upload,
+  UploadFile,
+  Image,
+} from 'antd';
 import React, { useState } from 'react';
 import {
   useProductListQuery,
@@ -6,20 +20,26 @@ import {
   useDeleteProductMutation,
   useEditProductMutation,
 } from './_ProductService';
-import { PlusOutlined, EditOutlined, DeleteOutlined, FileSearchOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  FileSearchOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 import TextArea from 'antd/es/input/TextArea';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTreeViewCategoryListQuery } from '../../components/TreeView/_TreeViewService';
-
+import { useImageUploader } from '../../hooks';
 const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
   const parentId = searchParams.get('parent_id') || '';
-
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<any>(null);
-
+  const { getBase64Images } = useImageUploader();
   const [form] = Form.useForm();
   const count = 5;
   const navigate = useNavigate();
@@ -36,9 +56,31 @@ const Products: React.FC = () => {
       description: item.description || 'N/A',
       price: item.price || 0,
       lastModified: item.lastModified || 'N/A',
+      picture: item.picture || [],
     })) || [];
 
   const columns = [
+    {
+      title: 'Image',
+      dataIndex: 'picture',
+      key: 'picture',
+      render: (picture: string[]) => {
+
+        console.log("picture", picture);
+        if (picture && picture.length > 0 && picture[0].startsWith('data:image')) {
+          return (
+            <Image
+              width={50}
+              height={50}
+              src={picture[0]}
+              alt="thumbnail"
+              style={{ objectFit: 'cover', borderRadius: 4 }}
+            />
+          );
+        }
+        return <span>No Image</span>;
+      },
+    },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -76,37 +118,16 @@ const Products: React.FC = () => {
   if (isLoading) return <Spin size="large" />;
   if (isDeleting) return <p>Failed to load data.</p>;
 
-  // const handleOk = async () => {
-  //   try {
-  //     const values = await form.validateFields();
-  //     console.log('first values', values);
-  //     const payload = {
-  //       ...values,
-  //       category: categoryList?.find((cat: any) => cat.id === values.parent_id)?.name,
-  //       lastModified: new Date().toISOString(),
-  //       picture: [],
-  //     };
-
-  //     await addProduct(payload).unwrap();
-  //     message.success('Product added successfully!');
-  //     form.resetFields();
-  //     setOpen(false);
-  //   } catch (err) {
-  //     console.error(err);
-  //     message.error('Failed to add product');
-  //   }
-  // };
-
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-
+      const pictures = await getBase64Images(fileList);
       const payload = {
         ...values,
         id: currentProduct?.key,
         category: categoryList?.find((cat: any) => cat.id === values.parent_id)?.name,
         lastModified: new Date().toISOString(),
-        picture: [],
+        picture: pictures,
       };
 
       if (isEditMode) {
@@ -118,6 +139,7 @@ const Products: React.FC = () => {
       }
 
       form.resetFields();
+      setFileList([]);
       setCurrentProduct(null);
       setIsEditMode(false);
       setOpen(false);
@@ -172,12 +194,10 @@ const Products: React.FC = () => {
           size="middle"
           style={{ marginBottom: 16 }}
           onClick={() => {
-            form.resetFields(); // Clear previous values
+            form.resetFields();
             setIsEditMode(false);
             setCurrentProduct(null);
             setOpen(true);
-
-            // Set default category if parentId exists
             if (parentId) {
               form.setFieldsValue({ parent_id: parentId });
             }
@@ -208,7 +228,6 @@ const Products: React.FC = () => {
           <Form.Item name="name" label="Product Name" rules={[{ required: true }]}>
             <Input placeholder="Enter product name" />
           </Form.Item>
-
           <Form.Item name="parent_id" label="Category" rules={[{ required: true }]}>
             <Select placeholder="Select a category">
               {categoryList?.map((cat: any) => (
@@ -218,11 +237,19 @@ const Products: React.FC = () => {
               ))}
             </Select>
           </Form.Item>
-
           <Form.Item name="description" label="Description">
             <TextArea rows={4} placeholder="Enter product description" />
           </Form.Item>
-
+          <Form.Item label="Upload Image">
+            <Upload
+              fileList={fileList}
+              onChange={({ fileList }) => setFileList(fileList)}
+              beforeUpload={() => false}
+              listType="picture"
+            >
+              <Button icon={<UploadOutlined />}>Select Image</Button>
+            </Upload>
+          </Form.Item>
           <Form.Item name="price" label="Price" rules={[{ required: true }]}>
             <Input type="number" placeholder="Enter price" />
           </Form.Item>
