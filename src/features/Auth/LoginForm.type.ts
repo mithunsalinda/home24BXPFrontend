@@ -11,7 +11,7 @@ export interface LoginResponse {
 }
 export interface User {
   email: string;
-  role?: string; /**TODO: ADD LATER */
+  role?: string /**TODO: ADD LATER */;
 }
 
 export interface AuthState {

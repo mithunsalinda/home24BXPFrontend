@@ -31,7 +31,33 @@ export const ProductsReducer = createApi({
       }),
       invalidatesTags: ['Products'],
     }),
+    editProduct: builder.mutation({
+      query: (product: any) => ({
+        url: `/products/${product.id}`,
+        method: 'PUT',
+        body: product,
+      }),
+      invalidatesTags: ['Products'],
+    }),
+    deleteProduct: builder.mutation({
+      query: (id: any) => ({
+        url: `/products/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Products'],
+    }),
+    productById: builder.query({
+      query: (id: string) => ({
+        url: `/products/${id}`,
+      }),
+    }),
   }),
 });
 
-export const { useProductListQuery, useAddProductMutation } = ProductsReducer;
+export const {
+  useProductListQuery,
+  useAddProductMutation,
+  useDeleteProductMutation,
+  useEditProductMutation,
+  useProductByIdQuery,
+} = ProductsReducer;

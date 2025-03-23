@@ -7,6 +7,7 @@ import AuthLayout from './layouts/AuthLayout';
 
 import ProtectedDashboardLayout from './layouts/ProtectedDashboardLayout';
 import Dashboard from './pages/Dashboard';
+import ProductDetails from './pages/ProductDetails';
 function App() {
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
             </Route>
             <Route path="/" element={<ProtectedDashboardLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/product-details/:id" element={<ProductDetails />} />
             </Route>
           </Routes>
         </Router>
