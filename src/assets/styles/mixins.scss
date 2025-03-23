@@ -1,13 +1,11 @@
-
-
 @mixin flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin responsive($breakpoint) {
+  @media screen and (max-width: $breakpoint) {
+    @content;
   }
-  
-  @mixin responsive($breakpoint) {
-    @media screen and (max-width: $breakpoint) {
-      @content;
-    }
-  }
+}

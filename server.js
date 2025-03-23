@@ -1,4 +1,3 @@
-// server.js
 import jsonServer from 'json-server';
 import auth from 'json-server-auth';
 
