@@ -157,6 +157,7 @@ const Products: React.FC = () => {
   const handleEdit = (record: any) => {
     setIsEditMode(true);
     setCurrentProduct(record);
+    setFileList(record.picture.map((pic: string, index: number) => ({ uid: index, url: pic })));
     form.setFieldsValue({
       name: record.name,
       description: record.description,
