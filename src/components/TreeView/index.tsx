@@ -9,9 +9,6 @@ import { useSelector } from 'react-redux';
 
 const TreeView: React.FC = () => {
   const { data = [], isLoading, isError } = useTreeViewCategoryListQuery({});
-  const treeData = useSelector(
-    (state: RootState) => state.treeView.queries['treeViewCategoryList({"":""})']?.data ?? []
-  );
   const navigate = useNavigate();
 
   const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
@@ -21,7 +18,6 @@ const TreeView: React.FC = () => {
     }
   };
 
-  console.log(treeData);
   return (
     <>
       <h2 style={{ padding: 10, fontSize: 14 }}>Product List</h2>
@@ -31,10 +27,7 @@ const TreeView: React.FC = () => {
         switcherIcon={<DownOutlined />}
         defaultExpandedKeys={['0']}
         onSelect={onSelect}
-        treeData={data.map((item) => ({
-          title: item.name,
-          key: item.parent_id,
-        }))}
+        treeData={data}
       />
     </>
   );

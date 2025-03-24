@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginSuccess } from './_LoginSlice';
 
 export const LoginForm: React.FC = () => {
-  const [triggerLogin, { data, isLoading }] = useLazyLoginQuery();
+  const [triggerLogin, { data, isLoading, error }] = useLazyLoginQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onFinish: FormProps<LoginRequest>['onFinish'] = async (values) => {
@@ -19,7 +19,6 @@ export const LoginForm: React.FC = () => {
         dispatch(loginSuccess(userPayload));
         const storage = values.remember ? localStorage : sessionStorage;
         storage.setItem('user', JSON.stringify(userPayload));
-
         navigate('/dashboard');
       } else {
         console.error('Invalid credentials');
@@ -63,6 +62,7 @@ export const LoginForm: React.FC = () => {
       <Form.Item<LoginRequest> name="remember" valuePropName="checked">
         <Checkbox>Remember me</Checkbox>
       </Form.Item>
+
       <Form.Item label={null}>
         <Button type="primary" htmlType="submit" loading={isLoading}>
           Login

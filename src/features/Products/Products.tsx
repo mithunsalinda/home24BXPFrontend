@@ -31,23 +31,37 @@ import TextArea from 'antd/es/input/TextArea';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTreeViewCategoryListQuery } from '../../components/TreeView/_TreeViewService';
 import { useImageUploader } from '../../hooks';
+import LastModifiedWidget from '../../components/CustomeWidgets/LastModifiedWidget';
+import DropDown from '../../components/DropDown';
 const Products: React.FC = () => {
+  const pageSizeOptions = [5, 10, 20, 50];
+  const defaultPageSize = parseInt(localStorage.getItem('product_page_size') || '5');
   const [searchParams] = useSearchParams();
   const parentId = searchParams.get('parent_id') || '';
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(defaultPageSize);
+  const [sorter, setSorter] = useState<{ field?: string; order?: string }>({});
   const [open, setOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<any>(null);
   const { getBase64Images } = useImageUploader();
   const [form] = Form.useForm();
-  const count = 5;
+
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useProductListQuery({ page, count, searchTerm: parentId });
+  const { data, isLoading, isError } = useProductListQuery({
+    page,
+    count: pageSize,
+    searchTerm: parentId,
+    sortField: sorter.field,
+    sortOrder: sorter.order,
+  });
   const { data: categoryList = [] } = useTreeViewCategoryListQuery({});
   const [addProduct, { isLoading: isAdding }] = useAddProductMutation();
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const [editProduct, { isLoading: isEditing }] = useEditProductMutation();
+  console.log('categoryList', categoryList);
+
   const dataSource =
     data?.data?.map((item: any, index: number) => ({
       key: item.id || index,
@@ -57,16 +71,18 @@ const Products: React.FC = () => {
       price: item.price || 0,
       lastModified: item.lastModified || 'N/A',
       picture: item.picture || [],
+      parent_id: item.parent_id || 'N/A',
     })) || [];
 
+  const lastModifiedProduct = [...dataSource].sort(
+    (a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()
+  )[0];
   const columns = [
     {
       title: 'Image',
       dataIndex: 'picture',
       key: 'picture',
       render: (picture: string[]) => {
-
-        console.log("picture", picture);
         if (picture && picture.length > 0 && picture[0].startsWith('data:image')) {
           return (
             <Image
@@ -85,6 +101,7 @@ const Products: React.FC = () => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      sorter: true,
       render: (text: string, record: any) => (
         <Link to={`/product-details/${record.key}`}>{text}</Link>
       ),
@@ -93,6 +110,7 @@ const Products: React.FC = () => {
     { title: 'Description', dataIndex: 'description', key: 'description' },
     { title: 'Price', dataIndex: 'price', key: 'price' },
     { title: 'Last Modified', dataIndex: 'lastModified', key: 'lastModified' },
+    { title: 'parent_id', dataIndex: 'parent_id', key: 'parent_id', hidden: true },
     {
       title: 'Actions',
       key: 'actions',
@@ -118,14 +136,28 @@ const Products: React.FC = () => {
   if (isLoading) return <Spin size="large" />;
   if (isDeleting) return <p>Failed to load data.</p>;
 
+  const findCategoryTitle = (categories: any[], targetKey: string): string | null => {
+    for (const category of categories) {
+      if (category.key === targetKey) return category.title;
+      if (category.children) {
+        const result = findCategoryTitle(category.children, targetKey);
+        if (result) return result;
+      }
+    }
+    return null;
+  };
+
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
       const pictures = await getBase64Images(fileList);
+
+      const categoryTitle = findCategoryTitle(categoryList, values.parent_id);
       const payload = {
         ...values,
         id: currentProduct?.key,
-        category: categoryList?.find((cat: any) => cat.id === values.parent_id)?.name,
+        //category: categoryList?.find((cat: any) => cat.id === values.parent_id)?.name,
+        category: categoryTitle, // 🟢 set the title
         lastModified: new Date().toISOString(),
         picture: pictures,
       };
@@ -155,24 +187,19 @@ const Products: React.FC = () => {
   };
 
   const handleEdit = (record: any) => {
+    console.log('record', record);
     setIsEditMode(true);
     setCurrentProduct(record);
     setFileList(record.picture.map((pic: string, index: number) => ({ uid: index, url: pic })));
+    const categoryTitle = findCategoryTitle(categoryList, record.parent_id);
     form.setFieldsValue({
       name: record.name,
       description: record.description,
       price: record.price,
-      parent_id: categoryList?.find((cat: any) => cat.name === record.category)?.parent_id,
+      parent_id: categoryTitle,
     });
     setOpen(true);
   };
-  // const handleCancel = () => {
-  //   form.resetFields();
-  //   setCurrentProduct(null);
-  //   setIsEditMode(false);
-  //   setOpen(false);
-  // };
-
   const handleDelete = async (record: any) => {
     try {
       await deleteProduct(record.key).unwrap();
@@ -186,9 +213,44 @@ const Products: React.FC = () => {
   const openSingleProduct = (record: any) => {
     navigate(`/product-details/${record.key}`);
   };
+
+  const handleTableChange = (pagination: any, filters: any, sorterObj: any) => {
+    setPage(pagination.current);
+    setPageSize(pagination.pageSize);
+    localStorage.setItem('product_page_size', pagination.pageSize);
+    setSorter({
+      field: sorterObj.field,
+      order:
+        sorterObj.order === 'ascend' ? 'asc' : sorterObj.order === 'descend' ? 'desc' : undefined,
+    });
+  };
+  const getLeafCategories = (categories: any[]): any[] => {
+    let leafNodes: any[] = [];
+
+    for (const cat of categories) {
+      if (!cat.children || cat.children.length === 0) {
+        leafNodes.push({ key: cat.key, title: cat.title });
+      } else {
+        leafNodes = [...leafNodes, ...getLeafCategories(cat.children)];
+      }
+    }
+
+    return leafNodes;
+  };
+
+  const renderCategoryOptions = (): React.ReactNode[] => {
+    const leafCategories = getLeafCategories(categoryList);
+    return leafCategories.map((cat) => (
+      <Select.Option key={cat.key} value={cat.key}>
+        {cat.title}
+      </Select.Option>
+    ));
+  };
+
   return (
     <>
       <Card title="Dashboard">
+        {lastModifiedProduct && <LastModifiedWidget product={lastModifiedProduct} />}
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -206,13 +268,17 @@ const Products: React.FC = () => {
         >
           Add Product
         </Button>
+        <DropDown />
         <Table
           dataSource={dataSource}
           columns={columns}
+          onChange={handleTableChange}
           pagination={{
             current: page,
-            pageSize: count,
-            onChange: (p) => setPage(p),
+            pageSize,
+            showSizeChanger: true,
+            pageSizeOptions: pageSizeOptions.map(String),
+            total: data?.total || 0,
           }}
         />
       </Card>
@@ -230,12 +296,8 @@ const Products: React.FC = () => {
             <Input placeholder="Enter product name" />
           </Form.Item>
           <Form.Item name="parent_id" label="Category" rules={[{ required: true }]}>
-            <Select placeholder="Select a category">
-              {categoryList?.map((cat: any) => (
-                <Select.Option key={cat.id} value={cat.parent_id}>
-                  {cat.name}
-                </Select.Option>
-              ))}
+            <Select placeholder="Select a category" showSearch optionFilterProp="children">
+              {renderCategoryOptions()}
             </Select>
           </Form.Item>
           <Form.Item name="description" label="Description">

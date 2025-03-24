@@ -1,27 +1,46 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../store/apiCommon';
+import { SortAscendingOutlined } from '@ant-design/icons';
 export const ProductsReducer = createApi({
   reducerPath: 'ProductService',
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Products'],
   endpoints: (builder: any) => ({
     productList: builder.query({
-      query: ({ page, count, searchTerm }: any) => {
+      query: ({ page, count, searchTerm, sortField, sortOrder }: any) => {
         const start = (page - 1) * count;
         return {
           url: `/products`,
           params: {
             start,
             count,
-            parent_id: searchTerm || '',
+            //parent_id: searchTerm || '',
+            _sort: sortField || 'name',
+            _order: sortOrder || 'desc',
           },
         };
       },
       providesTags: ['Products'],
-      transformResponse: (response: any, meta: any) => ({
-        data: response,
-        contentRange: meta?.response?.headers?.get('Content-Range'),
-      }),
+      transformResponse: (response: any, meta: any, arg) => {
+        const { searchTerm, sortField = 'name', sortOrder = 'desc' } = arg;
+        const filtered = searchTerm
+          ? response.filter((item) => item.parent_id?.startsWith(searchTerm))
+          : response;
+        const sorted = [...filtered].sort((a, b) => {
+          const valA = a[sortField];
+          const valB = b[sortField];
+
+          if (typeof valA === 'string') {
+            return sortOrder === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+          }
+          return sortOrder === 'asc' ? valA - valB : valB - valA;
+        });
+
+        return {
+          data: sorted,
+          contentRange: meta?.response?.headers?.get('Content-Range'),
+        };
+      },
     }),
     addProduct: builder.mutation({
       query: (product: any) => ({

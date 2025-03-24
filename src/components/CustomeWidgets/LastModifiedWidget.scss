@@ -1,0 +1,112 @@
+$breakpoints: (
+  tablet: 768px,
+  desktop: 1024px,
+);
+
+@mixin respond-to($device) {
+  @media (max-width: map-get($breakpoints, $device)) {
+    @content;
+  }
+}
+
+$spacing: (
+  xs: 4px,
+  sm: 8px,
+  md: 12px,
+  lg: 24px,
+);
+
+$font-sizes: (
+  small: 12px,
+  base: 14px,
+);
+
+$colors: (
+  border: #dfdfdf,
+  background: #f8f8f8,
+  text: #333,
+);
+
+$border-radius: (
+  sm: 4px,
+  md: 8px,
+);
+
+$image-size: 50px;
+
+@mixin flex($align: center, $justify: flex-start, $direction: row) {
+  display: flex;
+  align-items: $align;
+  flex-direction: $direction;
+}
+
+@mixin text-style($size: base, $color: text) {
+  font-size: map-get($font-sizes, $size);
+  color: map-get($colors, $color);
+}
+
+@mixin spacing($prop, $size) {
+  #{$prop}: map-get($spacing, $size);
+}
+
+.widgetHeader {
+  margin: 0;
+  @include spacing(margin-bottom, sm);
+  @include text-style(base);
+}
+
+.lastModifiedWidget {
+  border: 2px solid map-get($colors, border);
+  border-radius: map-get($border-radius, md);
+  padding: map-get($spacing, xs);
+  @include spacing(margin-bottom, lg);
+  background-color: map-get($colors, background);
+  @include flex(center, space-between);
+  flex-wrap: wrap;
+  width: 50%;
+
+  .productImage {
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+    width: $image-size;
+    height: $image-size;
+    overflow: hidden;
+  }
+
+  .productDetails {
+    display: flex;
+    flex-direction: column;
+    p {
+      line-height: 0.5;
+      @include text-style(small);
+      @include spacing(margin-left, md);
+    }
+  }
+
+  @include respond-to(tablet) {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: map-get($spacing, sm);
+
+    .productImage {
+      margin-bottom: map-get($spacing, sm);
+    }
+
+    .productDetails {
+      width: 100%;
+      p {
+        margin-left: 0;
+        margin-bottom: map-get($spacing, xs);
+      }
+    }
+  }
+}
+
+.imageThumb {
+  width: $image-size;
+  height: $image-size;
+  object-fit: cover;
+  border-radius: map-get($border-radius, sm);
+}
