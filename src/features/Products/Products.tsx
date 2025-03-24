@@ -11,6 +11,7 @@ import {
   Upload,
   UploadFile,
   Image,
+  Pagination,
 } from 'antd';
 import React, { useState } from 'react';
 import {
@@ -39,7 +40,10 @@ import { notifyError, notifySuccess } from '../../util/notify';
 import { priceValidationRules, productNameValidationRules } from '../../util/validation';
 import { render } from '@testing-library/react';
 import { formatted, formatUSD } from '../../util/formatter';
+import ProductCard from '../../components/ProductCard';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 const Products: React.FC = () => {
+  const enabled = useFeatureIsOn('productView');
   const pageSizeOptions = [5, 10, 20, 50];
   const defaultPageSize = parseInt(localStorage.getItem('product_page_size') || '5');
   const [searchParams] = useSearchParams();
@@ -55,7 +59,11 @@ const Products: React.FC = () => {
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
-  const { data = { data: [] }, isLoading, isError } = useProductListQuery({
+  const {
+    data = { data: [] },
+    isLoading,
+    isError,
+  } = useProductListQuery({
     page,
     count: pageSize,
     searchTerm: parentId,
@@ -68,7 +76,7 @@ const Products: React.FC = () => {
   const [editProduct, { isLoading: isEditing }] = useEditProductMutation();
   console.log('categoryList', categoryList);
 
-  const dataSource : DataSourceItem[] =
+  const dataSource: DataSourceItem[] =
     data?.data?.map((item: any, index: number) => ({
       key: item.id || index,
       name: item.name || 'N/A',
@@ -131,17 +139,20 @@ const Products: React.FC = () => {
     },
     { title: 'Category', dataIndex: 'category', key: 'category' },
     { title: 'Description', dataIndex: 'description', key: 'description', width: '30%' },
-    { title: 'Price', dataIndex: 'price', key: 'price',   render: (price: string) => {
-      const priceNum = parseFloat(price);
-      return <>{!isNaN(priceNum) ? formatUSD(priceNum) : '-'}</>;
-    } },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+      key: 'price',
+      render: (price: string) => {
+        const priceNum = parseFloat(price);
+        return <>{!isNaN(priceNum) ? formatUSD(priceNum) : '-'}</>;
+      },
+    },
     {
       title: 'Last Modified',
       dataIndex: 'lastModified',
       key: 'lastModified',
-      render: (record: any) => (
-        <>{moment(record.lastModified).format('YYYY-MM-DD HH:mm')}</>
-      ),
+      render: (record: any) => <>{moment(record.lastModified).format('YYYY-MM-DD HH:mm')}</>,
     },
     { title: 'Parent_id', dataIndex: 'parent_id', key: 'parent_id', hidden: true },
     {
@@ -149,7 +160,7 @@ const Products: React.FC = () => {
       dataIndex: 'isModified',
       key: 'isModified',
       hidden: true,
-      render: ( record: any) => <>{record.isModified ? 'true' : 'false'}</>,
+      render: (record: any) => <>{record.isModified ? 'true' : 'false'}</>,
     },
     {
       title: 'Actions',
@@ -215,7 +226,7 @@ const Products: React.FC = () => {
         };
         await editProduct(payloadEdit).unwrap();
         //message.success('Product updated successfully!');
-        notifySuccess('Product updated successfully!')
+        notifySuccess('Product updated successfully!');
       } else {
         const payloadAdd = {
           ...payload,
@@ -329,7 +340,7 @@ const Products: React.FC = () => {
           </Button>
         )}
 
-        <Table
+        {/* <Table
           dataSource={dataSource}
           columns={columns}
           onChange={handleTableChange}
@@ -340,7 +351,28 @@ const Products: React.FC = () => {
             pageSizeOptions: pageSizeOptions.map(String),
             total: data?.total || 0,
           }}
-        />
+        /> */}
+        {enabled ? (
+          <div className="productCardWrapper">
+            {dataSource.map((product) => (
+              <ProductCard product={product} deleteFunc={handleDelete} />
+            ))}
+            <div style={{ marginTop: 16, textAlign: 'center' }}></div>
+          </div>
+        ) : (
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            onChange={handleTableChange}
+            pagination={{
+              current: page,
+              pageSize,
+              showSizeChanger: true,
+              pageSizeOptions: pageSizeOptions.map(String),
+              total: data?.total || 0,
+            }}
+          />
+        )}
       </Card>
 
       <Modal
@@ -373,8 +405,8 @@ const Products: React.FC = () => {
               <Button icon={<UploadOutlined />}>Select Image</Button>
             </Upload>
           </Form.Item>
-          <Form.Item name="price" label="Price" rules={priceValidationRules} >
-            <Input type="number" placeholder="Enter price" addonBefore="$" min={0}/>
+          <Form.Item name="price" label="Price" rules={priceValidationRules}>
+            <Input type="number" placeholder="Enter price" addonBefore="$" min={0} />
           </Form.Item>
         </Form>
       </Modal>
