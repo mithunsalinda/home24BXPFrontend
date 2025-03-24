@@ -17,3 +17,15 @@ export interface Product {
   isLoading: boolean;
   isError: boolean;
 }
+export interface DataSourceItem {
+  key: string | number;
+  name: string;
+  category: string;
+  description: string;
+  price: number;
+  lastModified: string;
+  picture: string[];
+  parent_id: string;
+  isModified?: boolean;
+}
+

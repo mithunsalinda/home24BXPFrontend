@@ -8,7 +8,6 @@ import {
   Select,
   Input,
   message,
-  Anchor,
   Upload,
   UploadFile,
   Image,
@@ -32,10 +31,14 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTreeViewCategoryListQuery } from '../../components/TreeView/_TreeViewService';
 import { useImageUploader } from '../../hooks';
 import LastModifiedWidget from '../../components/CustomeWidgets/LastModifiedWidget';
-import DropDown from '../../components/DropDown';
 import { hasSubCategories } from '../../util/findCategoryInfo';
 import moment from 'moment';
 import DOMPurify from 'dompurify';
+import { DataSourceItem } from './Products.type';
+import { notifyError, notifySuccess } from '../../util/notify';
+import { priceValidationRules, productNameValidationRules } from '../../util/validation';
+import { render } from '@testing-library/react';
+import { formatted, formatUSD } from '../../util/formatter';
 const Products: React.FC = () => {
   const pageSizeOptions = [5, 10, 20, 50];
   const defaultPageSize = parseInt(localStorage.getItem('product_page_size') || '5');
@@ -52,7 +55,7 @@ const Products: React.FC = () => {
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useProductListQuery({
+  const { data = { data: [] }, isLoading, isError } = useProductListQuery({
     page,
     count: pageSize,
     searchTerm: parentId,
@@ -65,7 +68,7 @@ const Products: React.FC = () => {
   const [editProduct, { isLoading: isEditing }] = useEditProductMutation();
   console.log('categoryList', categoryList);
 
-  const dataSource =
+  const dataSource : DataSourceItem[] =
     data?.data?.map((item: any, index: number) => ({
       key: item.id || index,
       name: item.name || 'N/A',
@@ -128,12 +131,15 @@ const Products: React.FC = () => {
     },
     { title: 'Category', dataIndex: 'category', key: 'category' },
     { title: 'Description', dataIndex: 'description', key: 'description', width: '30%' },
-    { title: 'Price', dataIndex: 'price', key: 'price' },
+    { title: 'Price', dataIndex: 'price', key: 'price',   render: (price: string) => {
+      const priceNum = parseFloat(price);
+      return <>{!isNaN(priceNum) ? formatUSD(priceNum) : '-'}</>;
+    } },
     {
       title: 'Last Modified',
       dataIndex: 'lastModified',
       key: 'lastModified',
-      render: (text: string, record: any) => (
+      render: (record: any) => (
         <>{moment(record.lastModified).format('YYYY-MM-DD HH:mm')}</>
       ),
     },
@@ -143,12 +149,12 @@ const Products: React.FC = () => {
       dataIndex: 'isModified',
       key: 'isModified',
       hidden: true,
-      render: (text: string, record: any) => <>{record.isModified ? 'true' : 'false'}</>,
+      render: ( record: any) => <>{record.isModified ? 'true' : 'false'}</>,
     },
     {
       title: 'Actions',
       key: 'actions',
-      width: '11%',
+      width: '12%',
       render: (_: any, record: any) => (
         <>
           <Button
@@ -186,13 +192,10 @@ const Products: React.FC = () => {
     try {
       const values = await form.validateFields();
       const pictures = await getBase64Images(fileList);
-      console.log('values===', values);
       const categoryTitle = findCategoryTitle(categoryList, values.parent_id);
       let errror = DOMPurify.sanitize(values.description);
-      console.log('sdsdsdsd', errror);
-
       if (values.description !== errror) {
-        message.error('Wrong Input');
+        notifyError('Wrong Input');
         return;
       }
       const payload = {
@@ -211,14 +214,15 @@ const Products: React.FC = () => {
           isModified: true,
         };
         await editProduct(payloadEdit).unwrap();
-        message.success('Product updated successfully!');
+        //message.success('Product updated successfully!');
+        notifySuccess('Product updated successfully!')
       } else {
         const payloadAdd = {
           ...payload,
           isModified: false,
         };
         await addProduct(payloadAdd).unwrap();
-        message.success('Product added successfully!');
+        notifySuccess('Product added successfully!');
       }
 
       form.resetFields();
@@ -228,7 +232,7 @@ const Products: React.FC = () => {
       setOpen(false);
     } catch (err) {
       console.error(err);
-      message.error(isEditMode ? 'Failed to update product' : 'Failed to add product');
+      notifyError(isEditMode ? 'Failed to update product' : 'Failed to add product');
     }
   };
 
@@ -348,7 +352,7 @@ const Products: React.FC = () => {
         destroyOnClose
       >
         <Form form={form} layout="vertical">
-          <Form.Item name="name" label="Product Name" rules={[{ required: true }]}>
+          <Form.Item name="name" label="Product Name" rules={productNameValidationRules}>
             <Input placeholder="Enter product name" />
           </Form.Item>
           <Form.Item name="parent_id" label="Category" rules={[{ required: true }]}>
@@ -369,8 +373,8 @@ const Products: React.FC = () => {
               <Button icon={<UploadOutlined />}>Select Image</Button>
             </Upload>
           </Form.Item>
-          <Form.Item name="price" label="Price" rules={[{ required: true }]}>
-            <Input type="number" placeholder="Enter price" />
+          <Form.Item name="price" label="Price" rules={priceValidationRules} >
+            <Input type="number" placeholder="Enter price" addonBefore="$" min={0}/>
           </Form.Item>
         </Form>
       </Modal>
