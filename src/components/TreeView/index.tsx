@@ -25,7 +25,7 @@ const TreeView: React.FC = () => {
         showLine
         style={{ backgroundColor: 'rgb(67, 124, 255)', borderRadius: 0, color: 'white' }}
         switcherIcon={<DownOutlined />}
-        defaultExpandedKeys={['0']}
+        defaultExpandedKeys={[]}
         onSelect={onSelect}
         treeData={data}
       />

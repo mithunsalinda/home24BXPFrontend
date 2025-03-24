@@ -4,6 +4,7 @@ import { Button, Card, Carousel, Descriptions, Spin, Row, Col } from 'antd';
 import { useProductByIdQuery } from './_ProductService';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Product } from './Products.type';
+import moment from 'moment';
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams();
@@ -47,7 +48,9 @@ const ProductDetail: React.FC = () => {
             <Descriptions.Item label="Category">{data.category}</Descriptions.Item>
             <Descriptions.Item label="Description">{data.description}</Descriptions.Item>
             <Descriptions.Item label="Price">${data.price}</Descriptions.Item>
-            <Descriptions.Item label="Last Modified">{data.lastModified}</Descriptions.Item>
+            <Descriptions.Item label="Last Modified">
+              {moment(data.lastModified).format('YYYY-MM-DD HH:mm')}
+            </Descriptions.Item>
           </Descriptions>
         </Col>
       </Row>

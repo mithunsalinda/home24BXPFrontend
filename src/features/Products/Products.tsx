@@ -33,6 +33,9 @@ import { useTreeViewCategoryListQuery } from '../../components/TreeView/_TreeVie
 import { useImageUploader } from '../../hooks';
 import LastModifiedWidget from '../../components/CustomeWidgets/LastModifiedWidget';
 import DropDown from '../../components/DropDown';
+import { hasSubCategories } from '../../util/findCategoryInfo';
+import moment from 'moment';
+import DOMPurify from 'dompurify';
 const Products: React.FC = () => {
   const pageSizeOptions = [5, 10, 20, 50];
   const defaultPageSize = parseInt(localStorage.getItem('product_page_size') || '5');
@@ -72,11 +75,12 @@ const Products: React.FC = () => {
       lastModified: item.lastModified || 'N/A',
       picture: item.picture || [],
       parent_id: item.parent_id || 'N/A',
+      isModified: item.isModified,
     })) || [];
 
-  const lastModifiedProduct = [...dataSource].sort(
-    (a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()
-  )[0];
+  const lastModifiedProduct = [...dataSource]
+    .filter((product) => product.isModified)
+    .sort((a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime())[0];
   const columns = [
     {
       title: 'Image',
@@ -94,7 +98,22 @@ const Products: React.FC = () => {
             />
           );
         }
-        return <span>No Image</span>;
+        return (
+          <div
+            style={{
+              backgroundColor: '#afaaaacc',
+              height: 50,
+              width: 50,
+              justifyContent: 'center',
+              fontSize: 10,
+              alignItems: 'center',
+              display: 'flex',
+              borderRadius: 4,
+            }}
+          >
+            No Image
+          </div>
+        );
       },
     },
     {
@@ -102,18 +121,34 @@ const Products: React.FC = () => {
       dataIndex: 'name',
       key: 'name',
       sorter: true,
+      width: '20%',
       render: (text: string, record: any) => (
         <Link to={`/product-details/${record.key}`}>{text}</Link>
       ),
     },
     { title: 'Category', dataIndex: 'category', key: 'category' },
-    { title: 'Description', dataIndex: 'description', key: 'description' },
+    { title: 'Description', dataIndex: 'description', key: 'description', width: '30%' },
     { title: 'Price', dataIndex: 'price', key: 'price' },
-    { title: 'Last Modified', dataIndex: 'lastModified', key: 'lastModified' },
-    { title: 'parent_id', dataIndex: 'parent_id', key: 'parent_id', hidden: true },
+    {
+      title: 'Last Modified',
+      dataIndex: 'lastModified',
+      key: 'lastModified',
+      render: (text: string, record: any) => (
+        <>{moment(record.lastModified).format('YYYY-MM-DD HH:mm')}</>
+      ),
+    },
+    { title: 'Parent_id', dataIndex: 'parent_id', key: 'parent_id', hidden: true },
+    {
+      title: 'isModified',
+      dataIndex: 'isModified',
+      key: 'isModified',
+      hidden: true,
+      render: (text: string, record: any) => <>{record.isModified ? 'true' : 'false'}</>,
+    },
     {
       title: 'Actions',
       key: 'actions',
+      width: '11%',
       render: (_: any, record: any) => (
         <>
           <Button
@@ -151,22 +186,38 @@ const Products: React.FC = () => {
     try {
       const values = await form.validateFields();
       const pictures = await getBase64Images(fileList);
-
+      console.log('values===', values);
       const categoryTitle = findCategoryTitle(categoryList, values.parent_id);
+      let errror = DOMPurify.sanitize(values.description);
+      console.log('sdsdsdsd', errror);
+
+      if (values.description !== errror) {
+        message.error('Wrong Input');
+        return;
+      }
       const payload = {
         ...values,
+        description: DOMPurify.sanitize(values.description),
         id: currentProduct?.key,
-        //category: categoryList?.find((cat: any) => cat.id === values.parent_id)?.name,
-        category: categoryTitle, // 🟢 set the title
+        category: categoryTitle,
         lastModified: new Date().toISOString(),
         picture: pictures,
+        isModified: false,
       };
-
+      console.log('payload', payload);
       if (isEditMode) {
-        await editProduct(payload).unwrap();
+        const payloadEdit = {
+          ...payload,
+          isModified: true,
+        };
+        await editProduct(payloadEdit).unwrap();
         message.success('Product updated successfully!');
       } else {
-        await addProduct(payload).unwrap();
+        const payloadAdd = {
+          ...payload,
+          isModified: false,
+        };
+        await addProduct(payloadAdd).unwrap();
         message.success('Product added successfully!');
       }
 
@@ -196,7 +247,8 @@ const Products: React.FC = () => {
       name: record.name,
       description: record.description,
       price: record.price,
-      parent_id: categoryTitle,
+      parent_id: record.parent_id,
+      category: categoryTitle,
     });
     setOpen(true);
   };
@@ -247,28 +299,32 @@ const Products: React.FC = () => {
     ));
   };
 
+  const isLeafCategory = hasSubCategories(categoryList, parentId);
+
   return (
     <>
       <Card title="Dashboard">
         {lastModifiedProduct && <LastModifiedWidget product={lastModifiedProduct} />}
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          size="middle"
-          style={{ marginBottom: 16 }}
-          onClick={() => {
-            form.resetFields();
-            setIsEditMode(false);
-            setCurrentProduct(null);
-            setOpen(true);
-            if (parentId) {
-              form.setFieldsValue({ parent_id: parentId });
-            }
-          }}
-        >
-          Add Product
-        </Button>
-        <DropDown />
+        {!isLeafCategory && (
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            size="middle"
+            style={{ marginBottom: 16 }}
+            onClick={() => {
+              form.resetFields();
+              setIsEditMode(false);
+              setCurrentProduct(null);
+              setOpen(true);
+              if (parentId) {
+                form.setFieldsValue({ parent_id: parentId });
+              }
+            }}
+          >
+            Add Product
+          </Button>
+        )}
+
         <Table
           dataSource={dataSource}
           columns={columns}

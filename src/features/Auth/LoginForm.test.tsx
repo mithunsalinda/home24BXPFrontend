@@ -11,10 +11,7 @@ import { LoginForm } from './LoginForm';
 import { useLazyLoginQuery } from './_LoginService';
 
 vi.mock('./_LoginService', () => ({
-  useLazyLoginQuery: vi.fn(() => [
-    vi.fn(),
-    { data: [], isLoading: false, error: null },
-  ]),
+  useLazyLoginQuery: vi.fn(() => [vi.fn(), { data: [], isLoading: false, error: null }]),
 }));
 
 vi.mock('react-redux', async (importOriginal) => {
@@ -85,13 +82,12 @@ describe('LoginForm', () => {
     const submitButton = screen.getByRole('button', { name: /login/i });
     fireEvent.click(submitButton);
     await waitFor(() => {
-        const emailError = screen.getByText('Please input your Email!', { selector: 'div' });
-        const passError = screen.getByText('Please input your password!', { selector: 'div' });
-        expect(emailError).toBeInTheDocument();
-        expect(passError).toBeInTheDocument();
+      const emailError = screen.getByText('Please input your Email!', { selector: 'div' });
+      const passError = screen.getByText('Please input your password!', { selector: 'div' });
+      expect(emailError).toBeInTheDocument();
+      expect(passError).toBeInTheDocument();
     });
-});
-
+  });
 
   it('Test ==> Handle login', async () => {
     const mockTriggerLogin = vi.fn().mockImplementation(() => ({
@@ -99,11 +95,14 @@ describe('LoginForm', () => {
     }));
     const mockDispatch = vi.fn();
     const mockNavigate = vi.fn();
-  
-    vi.mocked(useLazyLoginQuery).mockReturnValue([mockTriggerLogin, { data: [], isLoading: false, error: null }]);
+
+    vi.mocked(useLazyLoginQuery).mockReturnValue([
+      mockTriggerLogin,
+      { data: [], isLoading: false, error: null },
+    ]);
     vi.mocked(useDispatch).mockReturnValue(mockDispatch);
     vi.mocked(useNavigate).mockReturnValue(mockNavigate);
-  
+
     render(
       <Provider store={store}>
         <MemoryRouter>
@@ -111,11 +110,11 @@ describe('LoginForm', () => {
         </MemoryRouter>
       </Provider>
     );
-  
+
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'admin@gmail.com' } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: '123' } });
     fireEvent.click(screen.getByRole('button', { name: /login/i }));
-  
+
     await waitFor(() => {
       expect(mockTriggerLogin).toHaveBeenCalledWith({
         email: 'admin@gmail.com',

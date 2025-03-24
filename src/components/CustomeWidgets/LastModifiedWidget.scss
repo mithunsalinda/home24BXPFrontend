@@ -78,7 +78,7 @@ $image-size: 50px;
     display: flex;
     flex-direction: column;
     p {
-      line-height: 0.5;
+      line-height: 0;
       @include text-style(small);
       @include spacing(margin-left, md);
     }
@@ -109,4 +109,14 @@ $image-size: 50px;
   height: $image-size;
   object-fit: cover;
   border-radius: map-get($border-radius, sm);
+}
+.no-image {
+  width: 50px;
+  background-color: #afaaaacc;
+  height: 50px;
+  border-radius: 4px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-size: 9px;
 }
