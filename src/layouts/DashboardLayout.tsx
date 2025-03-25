@@ -10,7 +10,7 @@ const DashboardLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const handleToggle = () => {
-    setCollapsed(prev => !prev);
+    setCollapsed((prev) => !prev);
   };
 
   return (
@@ -30,7 +30,7 @@ const DashboardLayout = () => {
       <Layout>
         <Sider
           width={280}
-          collapsedWidth={0}
+          collapsedWidth={10}
           collapsible
           collapsed={collapsed}
           onCollapse={setCollapsed}
@@ -56,7 +56,7 @@ const DashboardLayout = () => {
             minHeight: 'calc(100vh - 64px)',
           }}
         >
-          <Content style={{ overflow: 'auto' }}>
+          <Content style={{ overflow: 'auto', height: '10vh' }}>
             <Outlet />
           </Content>
         </Layout>

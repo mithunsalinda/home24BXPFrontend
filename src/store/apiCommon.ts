@@ -11,7 +11,7 @@ interface ErrorData {
 // };
 
 export const baseQueryWithReauth = async (args: any, api: any, extraOptions: any = {}) => {
-  const baseUrl = 'http://localhost:5000';
+  const baseUrl = 'https://silky-wakeful-fifth.glitch.me';
   const dynamicBaseQuery = fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers) => {

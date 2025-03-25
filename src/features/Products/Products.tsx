@@ -11,6 +11,7 @@ import {
   Upload,
   UploadFile,
   Image,
+  Flex,
 } from 'antd';
 import React, { useState } from 'react';
 import {
@@ -34,13 +35,14 @@ import LastModifiedWidget from '../../components/CustomeWidgets/LastModifiedWidg
 import { hasSubCategories } from '../../util/findCategoryInfo';
 import moment from 'moment';
 import DOMPurify from 'dompurify';
-import { DataSourceItem , ProductRecord} from './Products.type';
+import { DataSourceItem, ProductRecord } from './Products.type';
 import { notifyError, notifySuccess } from '../../util/notify';
 import { priceValidationRules, productNameValidationRules } from '../../util/validation';
 import { formatUSD } from '../../util/formatter';
 import ProductCard from '../../components/ProductCard';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 import { ColumnsType } from 'antd/es/table';
+import { Overley } from '../../components/Overley';
 const Products: React.FC = () => {
   const enabled = useFeatureIsOn('productView');
   const pageSizeOptions = [5, 10, 20, 50];
@@ -59,7 +61,7 @@ const Products: React.FC = () => {
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
-  const { data = { data: [] }, isLoading } = useProductListQuery<any>({
+  const { data = { data: [] }, isLoading: isProductLoading } = useProductListQuery<any>({
     page,
     count: pageSize,
     searchTerm: parentId,
@@ -87,7 +89,7 @@ const Products: React.FC = () => {
   const lastModifiedProduct = [...dataSource]
     .filter((product) => product.isModified)
     .sort((a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime())[0];
-  const columns : ColumnsType<ProductRecord>  | any= [
+  const columns: ColumnsType<ProductRecord> | any = [
     {
       title: 'Image',
       dataIndex: 'picture',
@@ -133,8 +135,14 @@ const Products: React.FC = () => {
       ),
       responsive: ['xs', 'sm', 'md', 'lg'],
     },
-    { title: 'Category', dataIndex: 'category', key: 'category',  },
-    { title: 'Description', dataIndex: 'description', key: 'description', width: '30%', responsive: ['sm', 'md', 'lg'],},
+    { title: 'Category', dataIndex: 'category', key: 'category' },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+      width: '30%',
+      responsive: ['sm', 'md', 'lg'],
+    },
     {
       title: 'Price',
       dataIndex: 'price',
@@ -181,9 +189,6 @@ const Products: React.FC = () => {
       ),
     },
   ];
-
-  if (isLoading || isEditing) return <Spin size="large" />;
-  if (isDeleting) return <p>Failed to load data.</p>;
 
   const findCategoryTitle = (categories: any[], targetKey: string): string | null => {
     for (const category of categories) {
@@ -311,9 +316,11 @@ const Products: React.FC = () => {
   };
 
   const isLeafCategory = hasSubCategories(categoryList, parentId);
-
+  const isLoadingAll = isProductLoading || isDeleting || isAdding || isEditing;
   return (
     <>
+      {isLoadingAll && <Overley isLoading={true} />}
+
       <Card title="Dashboard">
         {lastModifiedProduct && <LastModifiedWidget product={lastModifiedProduct} />}
         {!isLeafCategory && (
