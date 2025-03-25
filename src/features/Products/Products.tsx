@@ -1,7 +1,6 @@
 import {
   Card,
   Table,
-  Spin,
   Button,
   Modal,
   Form,
@@ -11,7 +10,6 @@ import {
   Upload,
   UploadFile,
   Image,
-  Flex,
 } from 'antd';
 import React, { useState } from 'react';
 import {

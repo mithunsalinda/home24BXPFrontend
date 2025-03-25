@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Card, Carousel, Descriptions, Spin, Row, Col } from 'antd';
+import { Button, Card, Carousel, Descriptions, Row, Col } from 'antd';
 import { useProductByIdQuery } from './_ProductService';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Product } from './Products.type';
