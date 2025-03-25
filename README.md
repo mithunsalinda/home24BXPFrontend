@@ -35,7 +35,7 @@ npm >= 9.x
 
 json-server for mocking backend API
 
-##Key Features
+## Key Features
  - Login/logout with mock credentials
 
  - Product category tree navigation
@@ -59,7 +59,7 @@ Build for production: npm run build
 
 Preview production build: npm run preview
 
-##Code Quality
+## Code Quality
  - Fully typed with TypeScript
 
  - Folder structure follows separation of concerns (features, shared, hooks)
@@ -68,7 +68,7 @@ Preview production build: npm run preview
 
  - GitHub Actions (optional) for lint/test pipelines
 
-##Technologies Used for Front End
+## Technologies Used for Front End
  - React + Vite
  - TypeScript
  - Ant Design (UI framework)
@@ -79,7 +79,7 @@ Preview production build: npm run preview
 
  - json-server for API mocking
 
-##Testing & Mocking
+## Testing & Mocking
  - Vitest for unit testing
 
  - @testing-library/react for component tests
