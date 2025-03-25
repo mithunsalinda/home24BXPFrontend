@@ -29,5 +29,5 @@ export interface DataSourceItem {
   isModified?: boolean;
 }
 export interface DataSourceItemList {
-  data: any
+  data: any;
 }

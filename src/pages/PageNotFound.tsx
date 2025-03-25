@@ -4,7 +4,14 @@ import { FrownOutlined } from '@ant-design/icons';
 
 const PageNotFound = () => {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <Result
         icon={<FrownOutlined style={{ fontSize: '64px', color: '#ff4d4f' }} />}
         status="404"

@@ -22,7 +22,7 @@ vi.mock('react-redux', async (importOriginal) => {
 });
 
 vi.mock('react-router-dom', async (importOriginal) => {
-  const actual : any = await importOriginal();
+  const actual: any = await importOriginal();
   return {
     ...actual,
     useNavigate: vi.fn(),
@@ -98,7 +98,7 @@ describe('LoginForm', () => {
     vi.mock('./_LoginService', () => ({
       useLazyLoginQuery: vi.fn(() => [
         vi.fn(),
-        { data: [], isLoading: false, error: null, reset: vi.fn() }, 
+        { data: [], isLoading: false, error: null, reset: vi.fn() },
       ]),
     }));
     vi.mocked(useDispatch).mockReturnValue(mockDispatch);

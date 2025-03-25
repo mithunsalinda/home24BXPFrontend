@@ -10,7 +10,8 @@ This project is a back-office interface built with React, TypeScript, Vite, and 
    ```bash
    git clone https://github.com/mithunsalinda/home24BXPFrontend.git
    cd main
-##Install dependencies:
+   ##Install dependencies:
+   ```
 
 bash
 Copy
@@ -36,23 +37,23 @@ npm >= 9.x
 json-server for mocking backend API
 
 ## Key Features
- - Login/logout with mock credentials
 
- - Product category tree navigation
+- Login/logout with mock credentials
 
- - Product listing with pagination and sorting
+- Product category tree navigation
 
- - Product detail view
+- Product listing with pagination and sorting
 
- - Add/modify product attributes (number, text, url, tags, boolean)
+- Product detail view
 
- - Custom widget for last modified product
+- Add/modify product attributes (number, text, url, tags, boolean)
 
- - Protected routes (no page refresh)
+- Custom widget for last modified product
 
- - Build & Development
+- Protected routes (no page refresh)
 
- 
+- Build & Development
+
 Run dev server: npm run dev
 
 Build for production: npm run build
@@ -60,62 +61,64 @@ Build for production: npm run build
 Preview production build: npm run preview
 
 ## Code Quality
- - Fully typed with TypeScript
 
- - Folder structure follows separation of concerns (features, shared, hooks)
+- Fully typed with TypeScript
 
- - ESLint + Prettier configured
+- Folder structure follows separation of concerns (features, shared, hooks)
 
- - GitHub Actions (optional) for lint/test pipelines
+- ESLint + Prettier configured
+
+- GitHub Actions (optional) for lint/test pipelines
 
 ## Technologies Used for Front End
- - React + Vite
- - TypeScript
- - Ant Design (UI framework)
 
- - Redux Toolkit for state management
+- React + Vite
+- TypeScript
+- Ant Design (UI framework)
 
- - React Router DOM for navigation
+- Redux Toolkit for state management
 
- - json-server for API mocking
+- React Router DOM for navigation
+
+- json-server for API mocking
 
 ## Testing & Mocking
- - Vitest for unit testing
 
- - @testing-library/react for component tests
+- Vitest for unit testing
 
- - Mocked API requests using MSW (optional enhancement)
- - A/B Testing integrated i can enable disable card view in product view using growthbook. (Please not card view does not support edit, delete and pagination feature its just for A/B testing)
+- @testing-library/react for component tests
 
- - Separate test cases for:
+- Mocked API requests using MSW (optional enhancement)
+- A/B Testing integrated i can enable disable card view in product view using growthbook. (Please not card view does not support edit, delete and pagination feature its just for A/B testing)
 
-    - Login flow : Coverd
+- Separate test cases for:
 
-    - Category tree : To Do
+  - Login flow : Coverd
 
-    - Product list behavior : To Do
+  - Category tree : To Do
 
+  - Product list behavior : To Do
 
 ## Development Dependencies
- - vite
 
- - react
+- vite
 
- - typescript
+- react
 
- - antd
+- typescript
 
- - redux toolkit + RTK Query
+- antd
 
- - react-router-dom
+- redux toolkit + RTK Query
 
- - json-server
+- react-router-dom
 
- - vitest
+- json-server
 
-
+- vitest
 
 ## Conclusion
+
 This project demonstrates a well-structured product management dashboard using modern React practices.
 
 ## Suggestions for improvement:

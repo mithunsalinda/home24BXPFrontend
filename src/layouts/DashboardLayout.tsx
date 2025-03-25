@@ -1,4 +1,4 @@
-import {  Layout, } from 'antd';
+import { Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
 
 import TreeView from '../components/TreeView';
@@ -7,8 +7,6 @@ import TopHeader from '../components/TopHeader';
 const { Header, Sider, Content } = Layout;
 
 const DashboardLayout = () => {
-
-
   return (
     <Layout>
       <Header

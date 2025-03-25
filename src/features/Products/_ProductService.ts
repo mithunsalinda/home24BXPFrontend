@@ -23,7 +23,7 @@ export const ProductsReducer = createApi({
       transformResponse: (response: any, meta: any, arg: any) => {
         const { searchTerm, sortField = 'name', sortOrder = 'desc' } = arg;
         const filtered = searchTerm
-          ? response.filter((item : any) => item.parent_id?.startsWith(searchTerm))
+          ? response.filter((item: any) => item.parent_id?.startsWith(searchTerm))
           : response;
         const sorted = [...filtered].sort((a, b) => {
           const valA = a[sortField];

@@ -1,10 +1,9 @@
 import React from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import { Tree } from 'antd';
-import type {  TreeProps } from 'antd';
+import type { TreeProps } from 'antd';
 import { useTreeViewCategoryListQuery } from './_TreeViewService';
 import { useNavigate } from 'react-router-dom';
-
 
 const TreeView: React.FC = () => {
   const { data = [] } = useTreeViewCategoryListQuery<any>({});

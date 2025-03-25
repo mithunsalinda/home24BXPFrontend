@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Col,Layout, Row, Typography } from 'antd';
+import { Card, Col, Layout, Row, Typography } from 'antd';
 import Logo from '../components/Logo';
 import { LoginForm } from '../features/Auth/LoginForm';
 
@@ -8,52 +8,27 @@ const { Title, Text } = Typography;
 const { Content } = Layout;
 
 const Login: React.FC = () => {
-
   return (
     <Layout style={{ minHeight: '100vh', backgroundColor: '#fff' }}>
       <Content>
         <Row style={{ height: '100vh' }}>
-          {/* Left Column */}
-          <Col span={12}  className='leftLoginWrapper'>
-            <div className='loginWrapper'>
+          <Col xs={24} md={24} lg={12} className="leftLoginWrapper">
+            <Logo size={200} className="mobileView mobileOnly" />
+            <div className="loginWrapper">
               <div style={{ marginBottom: 32 }}>
                 <Title level={2}>Sign in</Title>
                 <Text type="secondary">Please login to continue to your account.</Text>
               </div>
+
               <LoginForm />
-              {/* <Form name="login_form" initialValues={{ remember: true }} onFinish={onFinish} layout="vertical">
-                <Form.Item
-                  label="Email"
-                  name="email"
-                  rules={[{ required: true, message: 'Please enter your email!' }]}
-                >
-                  <Input prefix={<MailOutlined />} placeholder="Enter your email" />
-                </Form.Item>
-
-                <Form.Item
-                  label="Password"
-                  name="password"
-                  rules={[{ required: true, message: 'Please enter your password!' }]}
-                >
-                  <Input.Password prefix={<LockOutlined />} placeholder="Enter your password" />
-                </Form.Item>
-
-                <Form.Item name="remember" valuePropName="checked">
-                  <Checkbox>Keep me logged in</Checkbox>
-                </Form.Item>
-
-                <Form.Item>
-                  <Button type="primary" htmlType="submit" block>
-                    Sign in
-                  </Button>
-                </Form.Item>
-              </Form> */}
             </div>
           </Col>
-
-          {/* Right Column with Animation */}
           <Col
-            span={12}
+            className="rightLoginColumn"
+            xs={0}
+            sm={0}
+            md={0}
+            lg={12}
             style={{
               background: '#FFF',
               display: 'flex',
@@ -70,7 +45,7 @@ const Login: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
             >
-             <Logo size={300} className="imageBgColor" />
+              <Logo size={300} className="imageBgColor" />
             </motion.div>
 
             <motion.h1

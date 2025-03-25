@@ -1,4 +1,4 @@
-@use "variables";
+@use 'variables';
 .login-container-right {
   height: '100vh';
   background-color: variables.$bg-color-dark;
@@ -14,7 +14,6 @@
     font-size: 24px;
     font-weight: 600;
     margin-bottom: 20px;
-    
   }
   .login-subtitle {
     color: variables.$text-color-light;
@@ -63,10 +62,10 @@
   }
 }
 .leftLoginWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #4f4f4f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4f4f4f;
 }
 .loginWrapper {
   width: 100%;
@@ -74,5 +73,29 @@
   background-color: rgb(255 255 255 / 80%);
   padding: 20px;
   border-radius: 20px;
+}
 
+@media (max-width: 991px) {
+  .rightLoginColumn {
+    display: none !important;
+  }
+  .leftLoginWrapper {
+    background: linear-gradient(to bottom, #017efa, #07cde7);
+  }
+  .leftLoginWrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobileView {
+    margin-bottom: 50px;
+  }
+  .loginWrapper {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 992px) {
+  .mobileOnly {
+    display: none !important;
+  }
 }

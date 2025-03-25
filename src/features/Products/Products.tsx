@@ -11,7 +11,6 @@ import {
   Upload,
   UploadFile,
   Image,
-
 } from 'antd';
 import React, { useState } from 'react';
 import {
@@ -59,10 +58,7 @@ const Products: React.FC = () => {
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
-  const {
-    data = { data: [] },
-    isLoading,
-  } = useProductListQuery<any>({
+  const { data = { data: [] }, isLoading } = useProductListQuery<any>({
     page,
     count: pageSize,
     searchTerm: parentId,

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { loginSuccess } from './_LoginSlice';
 
 export const LoginForm: React.FC = () => {
-  const [triggerLogin, {isLoading }] = useLazyLoginQuery();
+  const [triggerLogin, { isLoading }] = useLazyLoginQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onFinish: FormProps<LoginRequest>['onFinish'] = async (values) => {
