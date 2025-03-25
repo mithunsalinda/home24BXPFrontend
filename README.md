@@ -1,54 +1,133 @@
-# React + TypeScript + Vite
+# Product Management Back Office App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a back-office interface built with React, TypeScript, Vite, and Ant Design. It allows users to manage products categorized in a tree structure, including attribute management and user authentication.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📦 Setup Instructions
 
-## Expanding the ESLint configuration
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/mithunsalinda/home24BXPFrontend.git
+   cd main
+Install dependencies:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+bash
+Copy
+Edit
+npm install
+Start the mock backend server:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+bash
+Copy
+Edit
+npx json-server --watch db.json --port 4000
+Start the development server:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+bash
+Copy
+Edit
+npm run dev
+🛠️ Pre-requisites
+Node.js >= 18.x
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+npm >= 9.x
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+json-server for mocking backend API
+
+Key Features
+ - Login/logout with mock credentials
+
+ - Product category tree navigation
+
+ - Product listing with pagination and sorting
+
+ - Product detail view
+
+ - Add/modify product attributes (number, text, url, tags, boolean)
+
+ - Custom widget for last modified product
+
+ - Protected routes (no page refresh)
+
+ - Build & Development
+
+ 
+Run dev server: npm run dev
+
+Build for production: npm run build
+
+Preview production build: npm run preview
+
+✅ Code Quality
+Fully typed with TypeScript
+
+Folder structure follows separation of concerns (features, shared, hooks)
+
+ESLint + Prettier configured
+
+GitHub Actions (optional) for lint/test pipelines
+
+🖥️ Technologies Used for Front End
+React + Vite
+
+TypeScript
+
+Ant Design (UI framework)
+
+Redux Toolkit for state management
+
+React Router DOM for navigation
+
+json-server for API mocking
+
+🧪 Testing & Mocking
+Vitest for unit testing
+
+@testing-library/react for component tests
+
+Mocked API requests using MSW (optional enhancement)
+
+Separate test cases for:
+
+Login flow
+
+Category tree
+
+Product list behavior
+
+Attribute form components
+
+📦 Development Dependencies
+vite
+
+react
+
+typescript
+
+antd
+
+redux toolkit
+
+react-router-dom
+
+json-server
+
+vitest
+
+@testing-library/react
+
+🧠 Conclusion
+This project demonstrates a well-structured product management dashboard using modern React practices. It meets all the required use cases and can be extended with features like real authentication, backend integration, role-based access, and analytics tracking.
+
+✨ Suggestions for improvement:
+
+Replace mock login with JWT-based real backend auth
+
+Add role-based permissions (Admin, Editor)
+
+Support for CSV/Excel import/export
+
+Add drag-and-drop support in category tree
+
+Use WebSockets or polling to update “last modified” product in real-time
