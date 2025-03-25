@@ -10,7 +10,7 @@ This project is a back-office interface built with React, TypeScript, Vite, and 
    ```bash
    git clone https://github.com/mithunsalinda/home24BXPFrontend.git
    cd main
-Install dependencies:
+##Install dependencies:
 
 bash
 Copy
@@ -29,13 +29,13 @@ Copy
 Edit
 npm run dev
 🛠️ Pre-requisites
-Node.js >= 18.x
+React >= 19.x
 
 npm >= 9.x
 
 json-server for mocking backend API
 
-Key Features
+##Key Features
  - Login/logout with mock credentials
 
  - Product category tree navigation
@@ -59,75 +59,69 @@ Build for production: npm run build
 
 Preview production build: npm run preview
 
-✅ Code Quality
-Fully typed with TypeScript
+##Code Quality
+ - Fully typed with TypeScript
 
-Folder structure follows separation of concerns (features, shared, hooks)
+ - Folder structure follows separation of concerns (features, shared, hooks)
 
-ESLint + Prettier configured
+ - ESLint + Prettier configured
 
-GitHub Actions (optional) for lint/test pipelines
+ - GitHub Actions (optional) for lint/test pipelines
 
-🖥️ Technologies Used for Front End
-React + Vite
+##Technologies Used for Front End
+ - React + Vite
+ - TypeScript
+ - Ant Design (UI framework)
 
-TypeScript
+ - Redux Toolkit for state management
 
-Ant Design (UI framework)
+ - React Router DOM for navigation
 
-Redux Toolkit for state management
+ - json-server for API mocking
 
-React Router DOM for navigation
+##Testing & Mocking
+ - Vitest for unit testing
 
-json-server for API mocking
+ - @testing-library/react for component tests
 
-🧪 Testing & Mocking
-Vitest for unit testing
+ - Mocked API requests using MSW (optional enhancement)
 
-@testing-library/react for component tests
+ - Separate test cases for:
 
-Mocked API requests using MSW (optional enhancement)
+ - Login flow : Coverd
 
-Separate test cases for:
+ - Category tree : To Do
 
-Login flow
+ - Product list behavior : To Do
 
-Category tree
 
-Product list behavior
+## Development Dependencies
+ - vite
 
-Attribute form components
+ - react
 
-📦 Development Dependencies
-vite
+ - typescript
 
-react
+ - antd
 
-typescript
+ - redux toolkit + RTK Query
 
-antd
+ - react-router-dom
 
-redux toolkit
+ - json-server
 
-react-router-dom
+ - vitest
 
-json-server
 
-vitest
 
-@testing-library/react
+## Conclusion
+This project demonstrates a well-structured product management dashboard using modern React practices.
 
-🧠 Conclusion
-This project demonstrates a well-structured product management dashboard using modern React practices. It meets all the required use cases and can be extended with features like real authentication, backend integration, role-based access, and analytics tracking.
+## Suggestions for improvement:
 
-✨ Suggestions for improvement:
-
-Replace mock login with JWT-based real backend auth
-
-Add role-based permissions (Admin, Editor)
-
-Support for CSV/Excel import/export
-
-Add drag-and-drop support in category tree
-
-Use WebSockets or polling to update “last modified” product in real-time
+- Replace mock login with JWT-based real backend auth
+- Add role-based permissions (Admin, Editor)
+- Support for CSV/Excel import/export
+- Add drag-and-drop support in category tree
+- Create users from the admin Panel
+- To maintain run the unit test befor commit using husky.
