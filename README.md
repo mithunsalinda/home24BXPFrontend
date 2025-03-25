@@ -85,14 +85,15 @@ Preview production build: npm run preview
  - @testing-library/react for component tests
 
  - Mocked API requests using MSW (optional enhancement)
+ - A/B Testing integrated i can enable disable card view in product view using growthbook. (Please not card view does not support edit, delete and pagination feature its just for A/B testing)
 
  - Separate test cases for:
 
- - Login flow : Coverd
+    - Login flow : Coverd
 
- - Category tree : To Do
+    - Category tree : To Do
 
- - Product list behavior : To Do
+    - Product list behavior : To Do
 
 
 ## Development Dependencies
