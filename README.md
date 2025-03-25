@@ -2,7 +2,7 @@
 
 This project is a back-office interface built with React, TypeScript, Vite, and Ant Design. It allows users to manage products categorized in a tree structure, including attribute management and user authentication.
 
-# live DEMO 🌐 https://mithunsalinda.github.io/home24BXPFrontend
+### live DEMO 🌐 https://mithunsalinda.github.io/home24BXPFrontend (Make sure to run local json Server) -- json-server --watch db.json --port 5000
 ---
 
 ## 📦 Setup Instructions
