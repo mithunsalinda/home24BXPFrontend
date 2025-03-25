@@ -25,7 +25,7 @@ Start the mock backend server:
 bash
 Copy
 Edit
-npx json-server --watch db.json --port 4000
+npx json-server --watch db.json --port 5000
 Start the development server:
 
 bash
