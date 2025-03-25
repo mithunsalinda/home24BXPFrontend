@@ -34,12 +34,13 @@ import LastModifiedWidget from '../../components/CustomeWidgets/LastModifiedWidg
 import { hasSubCategories } from '../../util/findCategoryInfo';
 import moment from 'moment';
 import DOMPurify from 'dompurify';
-import { DataSourceItem } from './Products.type';
+import { DataSourceItem , ProductRecord} from './Products.type';
 import { notifyError, notifySuccess } from '../../util/notify';
 import { priceValidationRules, productNameValidationRules } from '../../util/validation';
 import { formatUSD } from '../../util/formatter';
 import ProductCard from '../../components/ProductCard';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
+import { ColumnsType } from 'antd/es/table';
 const Products: React.FC = () => {
   const enabled = useFeatureIsOn('productView');
   const pageSizeOptions = [5, 10, 20, 50];
@@ -86,7 +87,7 @@ const Products: React.FC = () => {
   const lastModifiedProduct = [...dataSource]
     .filter((product) => product.isModified)
     .sort((a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime())[0];
-  const columns = [
+  const columns : ColumnsType<ProductRecord>  | any= [
     {
       title: 'Image',
       dataIndex: 'picture',
@@ -130,9 +131,10 @@ const Products: React.FC = () => {
       render: (text: string, record: any) => (
         <Link to={`/product-details/${record.key}`}>{text}</Link>
       ),
+      responsive: ['xs', 'sm', 'md', 'lg'],
     },
-    { title: 'Category', dataIndex: 'category', key: 'category' },
-    { title: 'Description', dataIndex: 'description', key: 'description', width: '30%' },
+    { title: 'Category', dataIndex: 'category', key: 'category',  },
+    { title: 'Description', dataIndex: 'description', key: 'description', width: '30%', responsive: ['sm', 'md', 'lg'],},
     {
       title: 'Price',
       dataIndex: 'price',
@@ -147,6 +149,7 @@ const Products: React.FC = () => {
       dataIndex: 'lastModified',
       key: 'lastModified',
       render: (record: any) => <>{moment(record.lastModified).format('YYYY-MM-DD HH:mm')}</>,
+      responsive: ['sm', 'md', 'lg'],
     },
     { title: 'Parent_id', dataIndex: 'parent_id', key: 'parent_id', hidden: true },
     {
@@ -365,6 +368,7 @@ const Products: React.FC = () => {
               pageSizeOptions: pageSizeOptions.map(String),
               total: data?.total || 0,
             }}
+            scroll={{ x: 'max-content' }}
           />
         )}
       </Card>

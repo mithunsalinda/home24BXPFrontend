@@ -4,9 +4,13 @@ import { Button, Dropdown, Space, Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess } from '../../features/Auth/_LoginSlice';
-import { UserOutlined, DownOutlined } from '@ant-design/icons';
+import { UserOutlined, DownOutlined, MenuOutlined } from '@ant-design/icons';
 
-const TopHeader: React.FC = () => {
+interface TopHeaderProps {
+  onToggleSidebar?: () => void;
+}
+
+const TopHeader: React.FC<TopHeaderProps> = ({ onToggleSidebar }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { email, name } = useSelector((state: any) => state.auth.user || {});
@@ -28,7 +32,20 @@ const TopHeader: React.FC = () => {
 
   return (
     <>
-      <Logo size={100} />
+<div style={{ display: 'flex', alignItems: 'center' }}>
+
+        {onToggleSidebar && (
+          <Button
+            type="text"
+            icon={<MenuOutlined />}
+            onClick={onToggleSidebar}
+            style={{ fontSize: '18px', marginRight: 16 }}
+          />
+        )}
+
+        {/* Logo */}
+        <Logo size={100} />
+      </div>
       <Space>
         <Dropdown overlay={menu} placement="bottomRight" trigger={['click']}>
           <Button icon={<UserOutlined />}>

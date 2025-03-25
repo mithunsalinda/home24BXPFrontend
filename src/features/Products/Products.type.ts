@@ -31,3 +31,14 @@ export interface DataSourceItem {
 export interface DataSourceItemList {
   data: any;
 }
+export interface ProductRecord {
+  key: string;
+  picture: string[];
+  name: string;
+  category: string;
+  description: string;
+  price: string;
+  lastModified: string;
+  parent_id?: string;
+  isModified?: boolean;
+}
