@@ -1,8 +1,8 @@
 import { Layout } from 'antd';
 import { Outlet } from 'react-router-dom';
-import React, { useState } from 'react';
 import TreeView from '../components/TreeView';
 import TopHeader from '../components/TopHeader';
+import { useState } from 'react';
 
 const { Header, Sider, Content } = Layout;
 
@@ -24,7 +24,6 @@ const DashboardLayout = () => {
           justifyContent: 'space-between',
         }}
       >
-        {/* Pass toggle control to TopHeader */}
         <TopHeader onToggleSidebar={handleToggle} />
       </Header>
 
@@ -49,8 +48,6 @@ const DashboardLayout = () => {
         >
           <TreeView />
         </Sider>
-
-        {/* Main layout area shifts when sidebar is visible */}
         <Layout
           style={{
             marginLeft: collapsed ? 0 : 280,

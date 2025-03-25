@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Card, Col, Layout, Row, Typography } from 'antd';
+import { Col, Layout, Row, Typography } from 'antd';
 import Logo from '../components/Logo';
 import { LoginForm } from '../features/Auth/LoginForm';
 
