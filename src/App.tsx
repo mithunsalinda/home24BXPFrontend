@@ -8,6 +8,7 @@ import AuthLayout from './layouts/AuthLayout';
 import ProtectedDashboardLayout from './layouts/ProtectedDashboardLayout';
 import Dashboard from './pages/Dashboard';
 import ProductDetails from './pages/ProductDetails';
+import PageNotFound from './pages/PageNotFound';
 function App() {
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/product-details/:id" element={<ProductDetails />} />
             </Route>
+            <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Router>
       </Provider>

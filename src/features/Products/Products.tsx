@@ -38,8 +38,7 @@ import DOMPurify from 'dompurify';
 import { DataSourceItem } from './Products.type';
 import { notifyError, notifySuccess } from '../../util/notify';
 import { priceValidationRules, productNameValidationRules } from '../../util/validation';
-import { render } from '@testing-library/react';
-import { formatted, formatUSD } from '../../util/formatter';
+import { formatUSD } from '../../util/formatter';
 import ProductCard from '../../components/ProductCard';
 import { useFeatureIsOn } from '@growthbook/growthbook-react';
 const Products: React.FC = () => {
@@ -49,10 +48,10 @@ const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
   const parentId = searchParams.get('parent_id') || '';
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(defaultPageSize);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(defaultPageSize);
   const [sorter, setSorter] = useState<{ field?: string; order?: string }>({});
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<any>(null);
   const { getBase64Images } = useImageUploader();
