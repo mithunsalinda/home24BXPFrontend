@@ -16,4 +16,4 @@ export const priceValidationRules = [
   },
 ];
 
-export const productNameValidationRules = [requiredField('Product Name'), noSpecialCharRule];
+export const productNameValidationRules = [requiredField('Product Name')];

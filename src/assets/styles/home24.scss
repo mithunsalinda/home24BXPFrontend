@@ -62,3 +62,17 @@
     }
   }
 }
+.leftLoginWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4f4f4f;
+}
+.loginWrapper {
+  width: 100%;
+  max-width: 400px;
+  background-color: rgb(255 255 255 / 80%);
+  padding: 20px;
+  border-radius: 20px;
+
+}

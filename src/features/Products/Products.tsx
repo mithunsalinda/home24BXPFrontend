@@ -330,6 +330,7 @@ const Products: React.FC = () => {
               form.resetFields();
               setIsEditMode(false);
               setCurrentProduct(null);
+              setFileList([]);
               setOpen(true);
               if (parentId) {
                 form.setFieldsValue({ parent_id: parentId });
