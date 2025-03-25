@@ -61,12 +61,10 @@ Preview production build: npm run preview
 
 ## Code Quality
  - Fully typed with TypeScript
-
  - Folder structure follows separation of concerns (features, shared, hooks)
-
  - ESLint + Prettier configured
 
- - GitHub Actions (optional) for lint/test pipelines
+
 
 ## Technologies Used for Front End
  - React + Vite
@@ -125,3 +123,4 @@ This project demonstrates a well-structured product management dashboard using m
 - Add drag-and-drop support in category tree
 - Create users from the admin Panel
 - To maintain run the unit test befor commit using husky.
+- use Sonar CUB  maintain good code quality
