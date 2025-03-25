@@ -1,4 +1,4 @@
-import { HashRouter  as Router, Routes, Route } from 'react-router';
+import { BrowserRouter as Router, Routes, Route } from 'react-router';
 import './App.css';
 import Login from './pages/Login';
 import { Provider } from 'react-redux';
