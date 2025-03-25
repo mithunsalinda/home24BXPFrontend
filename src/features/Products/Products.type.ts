@@ -28,3 +28,6 @@ export interface DataSourceItem {
   parent_id: string;
   isModified?: boolean;
 }
+export interface DataSourceItemList {
+  data: any
+}

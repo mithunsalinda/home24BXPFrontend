@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from '../Logo';
-import { Button, Dropdown, Space, Menu, Typography } from 'antd';
+import { Button, Dropdown, Space, Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess } from '../../features/Auth/_LoginSlice';

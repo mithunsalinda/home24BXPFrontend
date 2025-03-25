@@ -25,7 +25,7 @@ export const baseQueryWithReauth = async (args: any, api: any, extraOptions: any
 
   const { error } = result;
   if (error) {
-    const { status, data } = error as { status: number | string; data: ErrorData };
+    const { status } = error as { status: number | string; data: ErrorData };
 
     switch (status) {
       case 'FETCH_ERROR':

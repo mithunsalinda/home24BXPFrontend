@@ -1,13 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../store/apiCommon';
-import { SortAscendingOutlined } from '@ant-design/icons';
 export const ProductsReducer = createApi({
   reducerPath: 'ProductService',
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Products'],
   endpoints: (builder: any) => ({
     productList: builder.query({
-      query: ({ page, count, searchTerm, sortField, sortOrder }: any) => {
+      query: ({ page, count, sortField, sortOrder }: any) => {
         const start = (page - 1) * count;
         return {
           url: `/products`,
@@ -21,10 +20,10 @@ export const ProductsReducer = createApi({
         };
       },
       providesTags: ['Products'],
-      transformResponse: (response: any, meta: any, arg) => {
+      transformResponse: (response: any, meta: any, arg: any) => {
         const { searchTerm, sortField = 'name', sortOrder = 'desc' } = arg;
         const filtered = searchTerm
-          ? response.filter((item) => item.parent_id?.startsWith(searchTerm))
+          ? response.filter((item : any) => item.parent_id?.startsWith(searchTerm))
           : response;
         const sorted = [...filtered].sort((a, b) => {
           const valA = a[sortField];

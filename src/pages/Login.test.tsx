@@ -1,19 +1,16 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { describe, it, beforeEach, expect } from 'vitest';
 
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import { MemoryRouter } from 'react-router-dom';
-
-import { LoginForm } from './LoginForm';
 import Login from './Login';
 
 beforeEach(() => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: vi.fn().mockImplementation((query) => ({
+    value: vi.fn().mockImplementation((query: any) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -34,7 +31,7 @@ describe('LoginForm with redux-mock-store', () => {
   it('renders the login form with fields and button', () => {
     store = mockStore(initialState);
 
-    render(
+    const { getByLabelText, getByRole } = render(
       <Provider store={store}>
         <MemoryRouter>
           <Login />
@@ -42,8 +39,8 @@ describe('LoginForm with redux-mock-store', () => {
       </Provider>
     );
 
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+    expect(getByLabelText(/email/i)).toBeInTheDocument();
+    expect(getByLabelText(/password/i)).toBeInTheDocument();
+    expect(getByRole('button', { name: /login/i })).toBeInTheDocument();
   });
 });

@@ -1,5 +1,8 @@
-@import './variables';
-@import './mixins';
-@import './globals';
-@import './overrides';
-@import './home24';
+@use "sass:color";
+@use "sass:map";
+
+@use 'variables';
+@use 'mixins';
+@use 'globals';
+@use 'overrides';
+@use 'home24';

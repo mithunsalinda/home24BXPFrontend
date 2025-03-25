@@ -1,19 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button, Checkbox, Col, Form, Input, Layout, Row, Typography } from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { Col,Layout, Row, Typography } from 'antd';
 import Logo from '../components/Logo';
 import { LoginForm } from '../features/Auth/LoginForm';
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
 
-
-
 const Login: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log('Login values:', values);
-  };
 
   return (
     <Layout style={{ minHeight: '100vh', backgroundColor: '#fff' }}>

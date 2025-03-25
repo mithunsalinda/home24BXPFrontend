@@ -11,7 +11,7 @@ import {
   Upload,
   UploadFile,
   Image,
-  Pagination,
+
 } from 'antd';
 import React, { useState } from 'react';
 import {
@@ -47,6 +47,7 @@ const Products: React.FC = () => {
   const defaultPageSize = parseInt(localStorage.getItem('product_page_size') || '5');
   const [searchParams] = useSearchParams();
   const parentId = searchParams.get('parent_id') || '';
+
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(defaultPageSize);
@@ -61,19 +62,17 @@ const Products: React.FC = () => {
   const {
     data = { data: [] },
     isLoading,
-    isError,
-  } = useProductListQuery({
+  } = useProductListQuery<any>({
     page,
     count: pageSize,
     searchTerm: parentId,
     sortField: sorter.field,
     sortOrder: sorter.order,
   });
-  const { data: categoryList = [] } = useTreeViewCategoryListQuery({});
+  const { data: categoryList = [] } = useTreeViewCategoryListQuery<any>({});
   const [addProduct, { isLoading: isAdding }] = useAddProductMutation();
   const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
   const [editProduct, { isLoading: isEditing }] = useEditProductMutation();
-  console.log('categoryList', categoryList);
 
   const dataSource: DataSourceItem[] =
     data?.data?.map((item: any, index: number) => ({
@@ -184,7 +183,7 @@ const Products: React.FC = () => {
     },
   ];
 
-  if (isLoading) return <Spin size="large" />;
+  if (isLoading || isEditing) return <Spin size="large" />;
   if (isDeleting) return <p>Failed to load data.</p>;
 
   const findCategoryTitle = (categories: any[], targetKey: string): string | null => {
@@ -224,7 +223,6 @@ const Products: React.FC = () => {
           isModified: true,
         };
         await editProduct(payloadEdit).unwrap();
-        //message.success('Product updated successfully!');
         notifySuccess('Product updated successfully!');
       } else {
         const payloadAdd = {
@@ -280,7 +278,7 @@ const Products: React.FC = () => {
     navigate(`/product-details/${record.key}`);
   };
 
-  const handleTableChange = (pagination: any, filters: any, sorterObj: any) => {
+  const handleTableChange = (pagination: any, _: any, sorterObj: any) => {
     setPage(pagination.current);
     setPageSize(pagination.pageSize);
     localStorage.setItem('product_page_size', pagination.pageSize);
@@ -355,7 +353,7 @@ const Products: React.FC = () => {
         {enabled ? (
           <div className="productCardWrapper">
             {dataSource.map((product) => (
-              <ProductCard product={product} deleteFunc={handleDelete} />
+              <ProductCard product={product} />
             ))}
             <div style={{ marginTop: 16, textAlign: 'center' }}></div>
           </div>

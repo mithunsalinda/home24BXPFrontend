@@ -1,6 +1,7 @@
+@use "variables";
 .login-container-right {
   height: '100vh';
-  background-color: $bg-color-dark;
+  background-color: variables.$bg-color-dark;
   height: 100vh;
   display: flex;
   padding: 30px;
@@ -9,22 +10,21 @@
   justify-content: center;
   align-items: center;
   .login-title {
-    color: $text-color-light;
+    color: variables.$text-color-light;
     font-size: 24px;
     font-weight: 600;
     margin-bottom: 20px;
-    .login-title-span {
-    }
+    
   }
   .login-subtitle {
-    color: $text-color-light;
+    color: variables.$text-color-light;
     font-size: 16px;
     font-weight: 400;
     margin-bottom: 20px;
   }
 }
 .imageBgColor {
-  background-color: $bg-color-light;
+  background-color: variables.$bg-color-light;
   padding: 20px;
 }
 

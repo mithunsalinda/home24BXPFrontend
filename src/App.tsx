@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <Provider store={store}>
-        <Router>
+        <Router basename="/home24BXPFrontend">
           <Routes>
             <Route element={<AuthLayout />}>
               <Route path="/login" element={<Login />} />
