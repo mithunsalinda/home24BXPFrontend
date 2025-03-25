@@ -122,7 +122,7 @@ Preview production build: npm run preview
 
 ## Conclusion
 
-This project demonstrates a well-structured product management dashboard using modern React practices.
+This project demonstrates a well-structured product management dashboard using modern React practices and RTK Query cache the api response imporve site perfomance.
 
 ## Suggestions for improvement:
 
@@ -133,5 +133,6 @@ This project demonstrates a well-structured product management dashboard using m
 - Create users from the admin Panel
 - To maintain run the unit test befor commit using husky.
 
+## A/B Testing Demo
 ![A Btetsing](https://github.com/user-attachments/assets/3c0d97f6-70dd-4d0b-983a-6b2b40a8aa68)
 
